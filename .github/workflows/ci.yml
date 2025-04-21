@@ -27,11 +27,11 @@ jobs:
 
     - name: Build workspace
       run: |
-        source /opt/ros/jazzy/setup.bash
+        . /opt/ros/jazzy/setup.bash
         colcon build --event-handlers console_cohesion+
 
     - name: Run tests
       run: |
-        source /opt/ros/jazzy/setup.bash
+        . /opt/ros/jazzy/setup.bash
         colcon test
         colcon test-result --verbose
