@@ -4,6 +4,7 @@ from std_msgs.msg import Bool, String
 
 
 class MyPyNode(Node):
+
     def __init__(self):
         super().__init__('my_py_node')
         self.name_msg = String()
