@@ -16,7 +16,7 @@ jobs:
         apt update && apt install -y \
           python3-colcon-common-extensions \
           python3-pip git curl
-        pip3 install -U vcstool --break-system-packages
+        pip3 install -U vcstool autopep8 --break-system-packages
 
     - name: Install dependencies
       shell: bash
