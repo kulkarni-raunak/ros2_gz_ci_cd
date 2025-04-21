@@ -11,27 +11,29 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install colcon and tools
+    - name: Install tools
       run: |
         apt update && apt install -y \
           python3-colcon-common-extensions \
-          python3-pip \
-          git curl \
-          && pip3 install -U vcstool --break-system-packages
+          python3-pip git curl
+        pip3 install -U vcstool --break-system-packages
 
     - name: Install dependencies
+      shell: bash
       run: |
-        . /opt/ros/jazzy/setup.bash
+        source /opt/ros/jazzy/setup.bash
         rosdep update
         rosdep install --from-paths src --ignore-src -r -y
 
-    - name: Build workspace
+    - name: Build packages
+      shell: bash
       run: |
-        . /opt/ros/jazzy/setup.bash
+        source /opt/ros/jazzy/setup.bash
         colcon build --event-handlers console_cohesion+
 
     - name: Run tests
+      shell: bash
       run: |
-        . /opt/ros/jazzy/setup.bash
+        source /opt/ros/jazzy/setup.bash
         colcon test
         colcon test-result --verbose
