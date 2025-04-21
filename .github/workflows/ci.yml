@@ -5,7 +5,9 @@ on: [push, pull_request]
 jobs:
   build-and-test:
     runs-on: ubuntu-22.04  # The host runs Ubuntu, but...
-    container: ghcr.io/${{ github.repository_owner }}/ros2-devcontainer:latest # 👈 This is the Docker container where build runs
+    container:
+      image: ghcr.io/kulkarni-raunak/ros2-devcontainer:latest  # 👈 This is the Docker container where build runs
+      options: --user root
     # container: osrf/ros:jazzy-desktop-full
 
     steps:
