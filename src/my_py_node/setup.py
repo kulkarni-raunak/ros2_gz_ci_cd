@@ -19,6 +19,7 @@ setup(
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
+        'pytest11': [],
         'console_scripts': [
             'my_py_node = my_py_node.my_py_node:main',
         ],
