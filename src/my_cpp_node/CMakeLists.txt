@@ -25,6 +25,18 @@ if(BUILD_TESTING)
   # a copyright and license is added to all source files
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
+
+  find_package(ament_cmake_gtest REQUIRED)
+
+  ament_add_gtest(test_my_cpp_node test/test_my_cpp_node.cpp)
+  if(TARGET test_my_cpp_node)
+    target_include_directories(test_my_cpp_node PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    )
+    ament_target_dependencies(test_my_cpp_node
+      rclcpp
+    )
+  endif()
 endif()
 
 ament_package()
