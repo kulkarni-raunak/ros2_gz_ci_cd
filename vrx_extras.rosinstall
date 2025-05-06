@@ -1,0 +1,98 @@
+- git:
+    local-name: teleop_twist_keyboard
+    uri: https://github.com/ros2-gbp/teleop_twist_keyboard-release.git
+    version: release/jazzy/teleop_twist_keyboard/2.4.0-2
+- git:
+    local-name: joystick_drivers/joy
+    uri: https://github.com/ros2-gbp/joystick_drivers-release.git
+    version: release/jazzy/joy/3.3.0-3
+- git:
+    local-name: joystick_drivers/sdl2_vendor
+    uri: https://github.com/ros2-gbp/joystick_drivers-release.git
+    version: release/jazzy/sdl2_vendor/3.3.0-3
+- git:
+    local-name: teleop_twist_joy
+    uri: https://github.com/ros2-gbp/teleop_twist_joy-release.git
+    version: release/jazzy/teleop_twist_joy/2.6.2-1    
+
+- git:
+    local-name: actuator_msgs
+    uri: https://github.com/ros2-gbp/actuator_msgs-release.git
+    version: release/jazzy/actuator_msgs/0.0.1-4
+- git:
+    local-name: gps_umd/gps_msgs
+    uri: https://github.com/ros2-gbp/gps_umd-release.git
+    version: release/jazzy/gps_msgs/2.0.4-1
+- git:
+    local-name: gz_common_vendor
+    uri: https://github.com/ros2-gbp/gz_common_vendor-release.git
+    version: release/jazzy/gz_common_vendor/0.0.8-1
+- git:
+    local-name: gz_dartsim_vendor
+    uri: https://github.com/ros2-gbp/gz_dartsim_vendor-release.git
+    version: release/jazzy/gz_dartsim_vendor/0.0.3-1
+- git:
+    local-name: gz_fuel_tools_vendor
+    uri: https://github.com/ros2-gbp/gz_fuel_tools_vendor-release.git
+    version: release/jazzy/gz_fuel_tools_vendor/0.0.6-1
+- git:
+    local-name: gz_gui_vendor
+    uri: https://github.com/ros2-gbp/gz_gui_vendor-release.git
+    version: release/jazzy/gz_gui_vendor/0.0.5-1
+- git:
+    local-name: gz_msgs_vendor
+    uri: https://github.com/ros2-gbp/gz_msgs_vendor-release.git
+    version: release/jazzy/gz_msgs_vendor/0.0.6-1
+- git:
+    local-name: gz_ogre_next_vendor
+    uri: https://github.com/ros2-gbp/gz_ogre_next_vendor-release.git
+    version: release/jazzy/gz_ogre_next_vendor/0.0.5-1
+- git:
+    local-name: gz_physics_vendor
+    uri: https://github.com/ros2-gbp/gz_physics_vendor-release.git
+    version: release/jazzy/gz_physics_vendor/0.0.6-1
+- git:
+    local-name: gz_plugin_vendor
+    uri: https://github.com/ros2-gbp/gz_plugin_vendor-release.git
+    version: release/jazzy/gz_plugin_vendor/0.0.5-1
+- git:
+    local-name: gz_rendering_vendor
+    uri: https://github.com/ros2-gbp/gz_rendering_vendor-release.git
+    version: release/jazzy/gz_rendering_vendor/0.0.6-1
+- git:
+    local-name: gz_sensors_vendor
+    uri: https://github.com/ros2-gbp/gz_sensors_vendor-release.git
+    version: release/jazzy/gz_sensors_vendor/0.0.6-1
+- git:
+    local-name: gz_sim_vendor
+    uri: https://github.com/ros2-gbp/gz_sim_vendor-release.git
+    version: release/jazzy/gz_sim_vendor/0.0.8-1
+- git:
+    local-name: gz_tools_vendor
+    uri: https://github.com/ros2-gbp/gz_tools_vendor-release.git
+    version: release/jazzy/gz_tools_vendor/0.0.6-1
+- git:
+    local-name: gz_transport_vendor
+    uri: https://github.com/ros2-gbp/gz_transport_vendor-release.git
+    version: release/jazzy/gz_transport_vendor/0.0.6-1
+- git:
+    local-name: ros_gz/ros_gz_bridge
+    uri: https://github.com/ros2-gbp/ros_ign-release.git
+    version: release/jazzy/ros_gz_bridge/1.0.9-1
+- git:
+    local-name: ros_gz/ros_gz_interfaces
+    uri: https://github.com/ros2-gbp/ros_ign-release.git
+    version: release/jazzy/ros_gz_interfaces/1.0.9-1
+- git:
+    local-name: ros_gz/ros_gz_sim
+    uri: https://github.com/ros2-gbp/ros_ign-release.git
+    version: release/jazzy/ros_gz_sim/1.0.9-1
+- git:
+    local-name: sdformat_vendor
+    uri: https://github.com/ros2-gbp/sdformat_vendor-release.git
+    version: release/jazzy/sdformat_vendor/0.0.9-1
+- git:
+    local-name: vision_msgs/vision_msgs
+    uri: https://github.com/ros2-gbp/vision_msgs-release.git
+    version: release/jazzy/vision_msgs/4.1.1-3
+
