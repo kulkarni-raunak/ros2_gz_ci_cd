@@ -26,7 +26,7 @@ jobs:
       run: |
         source /opt/ros/jazzy/setup.bash
         mkdir -p /ros2_gz_ci_cd/src/submodules/vrx_extras
-        vcs import src/submodules/vrx_extras/ < vrx_extras.rosinstall
+        vcs import /ros2_gz_ci_cd/src/submodules/vrx_extras/ < vrx_extras.rosinstall
         rosdep update
         rosdep install --from-paths src --ignore-src -r -y
 
