@@ -43,6 +43,18 @@ jobs:
         colcon test
         colcon test-result --verbose
 
+    - name: Launch VRX Simulation (headless)
+      shell: bash
+      run: |
+        source /opt/ros/jazzy/setup.bash
+        gz sim --version
+        source install/setup.bash
+        echo "Launching VRX Simulation..."
+        timeout 120s ros2 launch vrx_gz competition.launch.py world:=sydney_regatta headless:=True &
+        sleep 20  # Let the simulation spin up
+        echo "Simulation ran for 20 seconds. Proceeding..."
+
+
   push-to-ghcr:
     runs-on: ubuntu-22.04
     needs: build-and-test
