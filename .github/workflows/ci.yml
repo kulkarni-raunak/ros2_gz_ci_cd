@@ -40,7 +40,7 @@ jobs:
       shell: bash
       run: |
         source /opt/ros/jazzy/setup.bash
-        colcon test
+        colcon test --merge-install
         colcon test-result --verbose
 
     - name: Launch VRX Simulation (headless)
