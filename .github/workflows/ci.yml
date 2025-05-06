@@ -34,13 +34,13 @@ jobs:
       shell: bash
       run: |
         source /opt/ros/jazzy/setup.bash
-        colcon build --event-handlers console_cohesion+
+        colcon build --symlink-install --merge-install --event-handlers console_cohesion+
 
     - name: Run tests
       shell: bash
       run: |
         source /opt/ros/jazzy/setup.bash
-        colcon test
+        colcon test --symlink-install --merge-install
         colcon test-result --verbose
 
     - name: Launch VRX Simulation (headless)
