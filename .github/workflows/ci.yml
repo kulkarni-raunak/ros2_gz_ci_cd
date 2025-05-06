@@ -25,8 +25,8 @@ jobs:
       shell: bash
       run: |
         source /opt/ros/jazzy/setup.bash
-        mkdir -p /ros2_gz_ci_cd/src/submodules/vrx_extras
-        vcs import /ros2_gz_ci_cd/src/submodules/vrx_extras/ < vrx_extras.rosinstall
+        mkdir -p ./src/submodules/vrx_extras
+        vcs import ./src/submodules/vrx_extras/ < vrx_extras.rosinstall
         rosdep update
         rosdep install --from-paths src --ignore-src -r -y
 
@@ -47,13 +47,13 @@ jobs:
       shell: bash
       run: |
         source /opt/ros/jazzy/setup.bash
-        mkdir -p /ros2_gz_ci_cd/src/submodules/vrx_extras
-        vcs import /ros2_gz_ci_cd/src/submodules/vrx_extras/ < vrx_extras.rosinstall
+        mkdir -p ./src/submodules/vrx_extras
+        vcs import ./src/submodules/vrx_extras/ < vrx_extras.rosinstall
         rosdep update
         rosdep install --from-paths src --ignore-src -r -y
         colcon build --symlink-install --merge-install
         gz sim --version
-        source /ros2_gz_ci_cd/install/setup.bash
+        source ./install/setup.bash
         echo "Launching VRX Simulation..."
         timeout 120s ros2 launch vrx_gz competition.launch.py world:=sydney_regatta headless:=True &
         sleep 20  # Let the simulation spin up
