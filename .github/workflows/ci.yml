@@ -47,6 +47,10 @@ jobs:
       shell: bash
       run: |
         source /opt/ros/jazzy/setup.bash
+        mkdir -p /ros2_gz_ci_cd/src/submodules/vrx_extras
+        vcs import /ros2_gz_ci_cd/src/submodules/vrx_extras/ < vrx_extras.rosinstall
+        rosdep update
+        rosdep install --from-paths src --ignore-src -r -y
         gz sim --version
         source /ros2_gz_ci_cd/install/setup.bash
         echo "Launching VRX Simulation..."
