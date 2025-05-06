@@ -48,11 +48,11 @@ jobs:
       run: |
         source /opt/ros/jazzy/setup.bash
         gz sim --version
-        source install/setup.bash
+        source /ros2_gz_ci_cd/install/setup.bash
         echo "Launching VRX Simulation..."
         timeout 120s ros2 launch vrx_gz competition.launch.py world:=sydney_regatta headless:=True &
         sleep 20  # Let the simulation spin up
-        echo "Simulation ran for 20 seconds. Proceeding..."
+        echo "Simulation ran for 120 seconds. Proceeding..."
 
 
   push-to-ghcr:
