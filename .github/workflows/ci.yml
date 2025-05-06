@@ -51,6 +51,7 @@ jobs:
         vcs import /ros2_gz_ci_cd/src/submodules/vrx_extras/ < vrx_extras.rosinstall
         rosdep update
         rosdep install --from-paths src --ignore-src -r -y
+        colcon build --symlink-install --merge-install
         gz sim --version
         source /ros2_gz_ci_cd/install/setup.bash
         echo "Launching VRX Simulation..."
