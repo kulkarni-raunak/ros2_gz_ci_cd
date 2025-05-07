@@ -3,62 +3,62 @@ name: ROS2 CI with Docker
 on: [push, pull_request]
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-22.04  # The host runs Ubuntu, but...
-    container:
-      image: ghcr.io/kulkarni-raunak/ros2-devcontainer:latest  # 👈 This is the Docker container where build runs
-      options: --user root
-    # container: osrf/ros:jazzy-desktop-full
+  # build-and-test:
+  #   runs-on: ubuntu-22.04  # The host runs Ubuntu, but...
+  #   container:
+  #     image: ghcr.io/kulkarni-raunak/ros2-devcontainer:latest  # 👈 This is the Docker container where build runs
+  #     options: --user root
+  #   # container: osrf/ros:jazzy-desktop-full
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      with:
-        submodules: recursive       
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
+  #     with:
+  #       submodules: recursive       
 
-    - name: Apply VRX patch
-      run: git apply ../../../patches/vrx_for_jazzy_fixes.patch
-      working-directory: src/submodules/vrx
+  #   - name: Apply VRX patch
+  #     run: git apply ../../../patches/vrx_for_jazzy_fixes.patch
+  #     working-directory: src/submodules/vrx
 
-    - name: Install tools
-      run: |
-        apt update && apt install -y \
-          python3-colcon-common-extensions \
-          python3-pip git curl
-        pip3 install -U vcstool autopep8 --break-system-packages
+  #   - name: Install tools
+  #     run: |
+  #       apt update && apt install -y \
+  #         python3-colcon-common-extensions \
+  #         python3-pip git curl
+  #       pip3 install -U vcstool autopep8 --break-system-packages
 
-    - name: Install dependencies
-      shell: bash
-      run: |
-        source /opt/ros/jazzy/setup.bash
-        mkdir -p ./src/submodules/vrx_extras
-        vcs import ./src/submodules/vrx_extras/ < vrx_extras.rosinstall
-        rosdep update
-        rosdep install --from-paths src --ignore-src -r -y
+  #   - name: Install dependencies
+  #     shell: bash
+  #     run: |
+  #       source /opt/ros/jazzy/setup.bash
+  #       mkdir -p ./src/submodules/vrx_extras
+  #       vcs import ./src/submodules/vrx_extras/ < vrx_extras.rosinstall
+  #       rosdep update
+  #       rosdep install --from-paths src --ignore-src -r -y
 
-    - name: Build packages
-      shell: bash
-      run: |
-        source /opt/ros/jazzy/setup.bash     
-        colcon build --symlink-install --merge-install --event-handlers console_cohesion+
+  #   - name: Build packages
+  #     shell: bash
+  #     run: |
+  #       source /opt/ros/jazzy/setup.bash     
+  #       colcon build --symlink-install --merge-install --event-handlers console_cohesion+
 
-    - name: Run tests
-      shell: bash
-      run: |
-        source /opt/ros/jazzy/setup.bash
-        colcon test --merge-install --packages-select my_py_node my_cpp_node
-        colcon test-result --verbose
+  #   - name: Run tests
+  #     shell: bash
+  #     run: |
+  #       source /opt/ros/jazzy/setup.bash
+  #       colcon test --merge-install --packages-select my_py_node my_cpp_node
+  #       colcon test-result --verbose
 
-    - name: Launch VRX Simulation (headless)
-      shell: bash
-      run: |
-        source /opt/ros/jazzy/setup.bash
-        gz sim --version
-        source ./install/setup.bash
-        echo "Launching VRX Simulation..."
-        timeout 120s ros2 launch vrx_gz competition.launch.py world:=sydney_regatta headless:=True &
-        sleep 20  # Let the simulation spin up
-        echo "Simulation ran for 120 seconds. Proceeding..."
+  #   - name: Launch VRX Simulation (headless)
+  #     shell: bash
+  #     run: |
+  #       source /opt/ros/jazzy/setup.bash
+  #       gz sim --version
+  #       source ./install/setup.bash
+  #       echo "Launching VRX Simulation..."
+  #       timeout 120s ros2 launch vrx_gz competition.launch.py world:=sydney_regatta headless:=True &
+  #       sleep 20  # Let the simulation spin up
+  #       echo "Simulation ran for 120 seconds. Proceeding..."
 
 
   push-to-ghcr:

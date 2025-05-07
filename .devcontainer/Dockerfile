@@ -53,6 +53,30 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/p
 RUN apt-get update && apt-get install -y \ 
     gz-harmonic
 
+# Store the fuel cache in the home folder so it can be reused and not downloaded every time
+RUN mkdir -p /home/.gz/fuel
+ENV GZ_FUEL_CACHE_PATH=/home/.gz/fuel
+
+# Cache fuel resources
+RUN /bin/bash -c 'cd /home/ && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/sydney_regatta \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/post \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/ground_station \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/antenna \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_marker_buoy_red \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_marker_buoy_black \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_marker_buoy_green \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_marker_buoy_white \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_round_buoy_orange \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_round_buoy_black \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/platypus \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/crocodile \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/tent/4 \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/foldable_table/4 \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/foldable_chair/3 \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/turtle \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/wam-v'
+
+
 # preamptive Install ROS dep packages
 RUN apt-get update && apt-get install -y \
     ros-jazzy-ament-cmake-pycodestyle \
