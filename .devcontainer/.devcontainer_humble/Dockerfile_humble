@@ -114,8 +114,7 @@ RUN sudo apt install -y \
 
 
 # Rosdep update
-RUN rosdep update && \
-    rosdep install --from-paths src --ignore-src -r -y
+RUN rosdep update
 
 # Source the ROS setup file
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
