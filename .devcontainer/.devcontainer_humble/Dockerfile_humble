@@ -1,0 +1,137 @@
+# Build on top of npslearninglab/watery_robots:vrx_current. It has ros2 humble, gazebo garden and ros_gz installed. 
+FROM npslearninglab/watery_robots:vrx_current
+
+# Switch USER from developer to root
+# https://hub.docker.com/layers/npslearninglab/watery_robots/vrx_current/images/sha256-c8bb6645b728f18e8f8dd9f423eddc258eb2b1efedc3a0d4ec36b57e52e4e4f9?context=explore
+USER root
+
+
+RUN apt-get update \
+    && apt-get install -y \
+    gz-garden \
+    ros-${ROS_DISTRO}-ros-gzgarden
+
+# Store the fuel cache in the home folder so it can be reused and not downloaded every time
+RUN mkdir -p /home/.gz/fuel
+ENV GZ_FUEL_CACHE_PATH=/home/.gz/fuel
+
+# Cache fuel resources
+RUN /bin/bash -c 'cd /home/ && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/sydney_regatta \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/post \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/ground_station \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/antenna \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_marker_buoy_red \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_marker_buoy_black \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_marker_buoy_green \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_marker_buoy_white \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_round_buoy_orange \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/mb_round_buoy_black \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/platypus \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/crocodile \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/tent/4 \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/foldable_table/4 \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/foldable_chair/3 \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/turtle \
+  && gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/wam-v'
+
+## install dependencies
+# gfortran libopenblas-dev -> dependency from module guidance
+# python3-sdformat13 ->  requirement from vrx
+# libgeographic-dev -> uuv_cpc_sensor
+RUN apt-get update && apt-get install -y \
+    gfortran \
+    libopenblas-dev \
+    libgeographic-dev \
+    python3-sdformat13 \
+    ros-${ROS_DISTRO}-geographic-msgs \
+    ros-${ROS_DISTRO}-geographic-info \
+    ros-${ROS_DISTRO}-joint-state-publisher-gui
+
+# install python packages
+RUN pip3 install \
+    transforms3d
+
+# install Groot
+RUN cd /home \
+    && wget https://s3.us-west-1.amazonaws.com/download.behaviortree.dev/groot2_linux_installer/Groot2-v1.5.2-linux-installer.run \
+    && chmod +x Groot2-v1.5.2-linux-installer.run \
+    && /home/Groot2-v1.5.2-linux-installer.run in -c --al --root /home/Groot \
+    && echo "alias groot=/home/Groot/bin/groot2" >> /etc/bash.bashrc
+
+# Install conan and allow all users to use conan
+RUN python3 -m pip install conan==1.61.0    
+
+COPY ./conan /conan
+COPY ./conanfile.txt /tmp
+ENV CONAN_USER_HOME=/.conan
+RUN mkdir /.conan
+RUN conan config install /conan
+RUN conan profile new --detect default
+RUN conan profile update settings.cppstd=17 default
+RUN conan profile update settings.compiler.libcxx=libstdc++11 default
+RUN conan install /tmp/ --build=missing
+RUN conan profile update options.ad_fusion:target_processor=cpu-only default
+RUN conan profile update options.ad_shared:target_processor=cpu-only default
+RUN chmod -R 777 /.conan
+
+# ccache
+RUN apt-get install -y ccache
+ENV PATH="/usr/lib/ccache:$PATH"
+
+# Add vscode user with same UID and GID as your host system
+# (copied from https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user#_creating-a-nonroot-user)
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+# Switch from root to user
+USER $USERNAME
+
+# Add user to video group to allow access to webcam
+RUN sudo usermod --append --groups video $USERNAME
+
+# Update all packages
+RUN sudo apt update && sudo apt upgrade -y
+
+# 
+RUN sudo apt-get update && sudo apt update
+
+## install dependencies
+# gfortran libopenblas-dev -> dependency from module guidance
+# python3-sdformat13 ->  requirement from vrx
+# libgeographic-dev -> uuv_cpc_sensor
+# gdb & gdbserver -> for debugging ros2 cpp nodes
+# xterm for teleop keyboard shell
+# QCustomplot for plotting in rviz2
+RUN sudo apt install -y \
+    gdb \
+    gdbserver \
+    ros-humble-behaviortree-cpp \
+    ros-humble-generate-parameter-library \
+    ros-humble-cartographer-ros \
+    ros-humble-cartographer-ros-msgs \
+    ros-humble-cartographer-ros-dbgsym \
+    ros-humble-joint-state-publisher-gui \
+    ros-humble-turtlebot3 \
+    ros-humble-controller-manager-dbgsym \
+    ros-humble-controller-manager \
+    ros-humble-test-msgs-dbgsym \
+    ros-humble-robot-localization-dbgsym \
+    libgz-plugin2-dev \
+    xterm \
+    libqcustomplot-dev
+
+## install python packages
+
+
+# Rosdep update
+RUN rosdep update && \
+    rosdep install --from-paths src --ignore-src -r -y
+
+# Source the ROS setup file
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc

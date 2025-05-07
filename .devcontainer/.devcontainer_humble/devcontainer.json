@@ -1,0 +1,62 @@
+{
+  "name": "ROS 2 Workspace jazzy-ros-base",
+  "build": {
+      "dockerfile": "Dockerfile_humble",
+      "context": "../../..",
+      "args": {
+        "--rm": "true",
+        "--tag": "OSRF:humble_garden_24"
+      }
+  
+  },
+  "customizations": {
+      "vscode": {
+          "extensions": [
+              "ms-python.python",
+              "charliermarsh.ruff",
+              "ms-vscode.cpptools-extension-pack",
+              "ms-iot.vscode-ros",
+              "smilerobotics.urdf",
+              "redhat.vscode-xml",
+              "tamasfe.even-better-toml",
+              "timonwong.shellcheck",
+              "yzhang.markdown-all-in-one",
+          ],
+          "settings": {
+              "files.associations": {
+                  "*.rviz": "yaml",
+                  "*.srdf": "xml",
+                  "*.urdf": "xml",
+                  "*.xacro": "xml"
+              }
+          }
+      }
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/${localWorkspaceFolderBasename},type=bind",
+  "workspaceFolder": "/${localWorkspaceFolderBasename}",
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/vscode/.bash_history,type=bind",
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bashrc,target=/home/vscode/.bashrc,type=bind",                                           // NB: workspace's .bashrc file is in use
+    // "source=${localEnv:HOME}${localEnv:USERPROFILE}/,target=/home/vscode/localusr,type=bind",                           //mount local home in a folder in the container user's home
+    // "source=${localEnv:HOME}${localEnv:USERPROFILE}/,target=/home/vscode/,type=bind",                                     //mount local home in the container user's home   NB: Local .bashrc is in use
+    "type=bind,source=/dev/input,target=/dev/input",
+    // "source=${localEnv:HOME}${localEnv:USERPROFILE}/.cache/ccache,target=/home/vscode/.cache/ccache,type=bind", // mount ccache in container
+    // "source=${localEnv:HOME}${localEnv:USERPROFILE}/data/test_ros_bags,target=/${localWorkspaceFolderBasename}/rosbags,type=bind", // mount test rosbags
+  ],
+  "runArgs": [
+    "--rm",
+    "-it",
+    "-e=DISPLAY",
+    "-e=QT_X11_NO_MITSHM=1",
+    "-e=TERM",
+    "--volume=/tmp/.X11-unix:/tmp/.X11-unix:rw",
+    "--volume=/dev/shm:/dev/shm",       // Shared memory for better performance
+    "--volume=/dev:/dev",               // Access to hardware devices
+    // "--volume=${localEnv:HOME}/.gz/fuel:/home/vscode/.gz/fuel", // Gazebo fuel cache
+    "--privileged",
+    "--network=host",
+    "--ipc=host",
+    "--pid=host"
+  ],
+
+}
