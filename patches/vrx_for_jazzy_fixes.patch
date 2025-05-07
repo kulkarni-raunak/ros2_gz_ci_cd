@@ -1,0 +1,160 @@
+diff --git a/vrx_gz/CMakeLists.txt b/vrx_gz/CMakeLists.txt
+index fae716ad..e20ddd7f 100644
+--- a/vrx_gz/CMakeLists.txt
++++ b/vrx_gz/CMakeLists.txt
+@@ -5,26 +5,38 @@ project(vrx_gz)
+ find_package(ament_cmake REQUIRED)
+ find_package(ament_cmake_python REQUIRED)
+ 
+-find_package(gz-sim7 REQUIRED)
+-set(GZ_SIM_VER ${gz-sim7_VERSION_MAJOR})
+-
+-find_package(gz-common5 REQUIRED COMPONENTS graphics)
+-set(GZ_COMMON_VER ${gz-common5_VERSION_MAJOR})
+-find_package(gz-fuel_tools8 REQUIRED)
+-find_package(gz-math7 REQUIRED)
+-set(GZ_MATH_VER ${gz-math7_VERSION_MAJOR})
+-find_package(gz-msgs9 REQUIRED)
+-find_package(gz-transport12 REQUIRED)
+-set(GZ_TRANSPORT_VER ${gz-transport12_VERSION_MAJOR})
+-find_package(gz-plugin2 REQUIRED COMPONENTS loader register)
+-set(GZ_PLUGIN_VER ${gz-plugin2_VERSION_MAJOR})
+-find_package(gz-rendering7 REQUIRED)
+-set(GZ_RENDERING_VER ${gz-rendering7_VERSION_MAJOR})
+-find_package(gz-sensors7 REQUIRED)
+-set(GZ_SENSORS_VER ${gz-sensors7_VERSION_MAJOR})
+-find_package(gz-utils2 REQUIRED)
+-set(GZ_UTILS_VER ${gz-utils2_VERSION_MAJOR})
+-find_package(sdformat13 REQUIRED)
++find_package(gz_sim_vendor REQUIRED)
++find_package(gz-sim REQUIRED)
++
++find_package(gz_common_vendor REQUIRED)
++find_package(gz-common REQUIRED COMPONENTS graphics)
++
++find_package(gz_fuel_tools_vendor REQUIRED)
++find_package(gz-fuel_tools REQUIRED)
++
++find_package(gz_math_vendor REQUIRED)
++find_package(gz-math REQUIRED)
++
++find_package(gz_msgs_vendor REQUIRED)
++find_package(gz-msgs REQUIRED)
++
++find_package(gz_transport_vendor REQUIRED)
++find_package(gz-transport REQUIRED)
++
++find_package(gz_plugin_vendor REQUIRED)
++find_package(gz-plugin REQUIRED COMPONENTS loader register)
++
++find_package(gz_rendering_vendor REQUIRED)
++find_package(gz-rendering REQUIRED)
++
++find_package(gz_sensors_vendor REQUIRED)
++find_package(gz-sensors REQUIRED)
++
++find_package(gz_utils_vendor REQUIRED)
++find_package(gz-utils REQUIRED)
++
++find_package(sdformat_vendor REQUIRED)
++
+ 
+ find_package(std_msgs REQUIRED)
+ 
+diff --git a/vrx_gz/hooks/resource_paths.dsv.in b/vrx_gz/hooks/resource_paths.dsv.in
+index daada84c..9f210c62 100644
+--- a/vrx_gz/hooks/resource_paths.dsv.in
++++ b/vrx_gz/hooks/resource_paths.dsv.in
+@@ -1,3 +1,4 @@
++prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;@CMAKE_INSTALL_PREFIX@/share/
+ prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;@CMAKE_INSTALL_PREFIX@/share/@PROJECT_NAME@/worlds
+ prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;@CMAKE_INSTALL_PREFIX@/share/@PROJECT_NAME@/worlds/2023_practice
+ prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;@CMAKE_INSTALL_PREFIX@/share/@PROJECT_NAME@/models
+diff --git a/vrx_gz/src/WayfindingScoringPlugin.cc b/vrx_gz/src/WayfindingScoringPlugin.cc
+index 8319e007..255e6c43 100644
+--- a/vrx_gz/src/WayfindingScoringPlugin.cc
++++ b/vrx_gz/src/WayfindingScoringPlugin.cc
+@@ -27,6 +27,7 @@
+ #include <gz/sim/World.hh>
+ #include <gz/plugin/Register.hh>
+ #include <gz/transport/Node.hh>
++#include <gz/msgs.hh>
+ #include <sdf/sdf.hh>
+ 
+ #include "WayfindingScoringPlugin.hh"
+diff --git a/vrx_gz/src/vrx_gz/model.py b/vrx_gz/src/vrx_gz/model.py
+index 0a861114..c1480057 100644
+--- a/vrx_gz/src/vrx_gz/model.py
++++ b/vrx_gz/src/vrx_gz/model.py
+@@ -16,7 +16,7 @@ import codecs
+ import os
+ import subprocess
+ 
+-import sdformat13 as sdf
++import sdformat14 as sdf
+ 
+ from ament_index_python.packages import get_package_share_directory
+ from ament_index_python.packages import PackageNotFoundError
+diff --git a/vrx_gz/src/vrx_gz/payload_bridges.py b/vrx_gz/src/vrx_gz/payload_bridges.py
+index c21f5ec8..28fe3036 100644
+--- a/vrx_gz/src/vrx_gz/payload_bridges.py
++++ b/vrx_gz/src/vrx_gz/payload_bridges.py
+@@ -1,6 +1,6 @@
+ from vrx_gz.bridge import Bridge, BridgeDirection
+ 
+-import sdformat13 as sdf
++import sdformat14 as sdf
+ 
+ 
+ def gz_prefix(world_name, model_name, link_name, sensor_name):
+diff --git a/vrx_ros/CMakeLists.txt b/vrx_ros/CMakeLists.txt
+index 95aa150a..40239070 100644
+--- a/vrx_ros/CMakeLists.txt
++++ b/vrx_ros/CMakeLists.txt
+@@ -5,9 +5,14 @@ project(vrx_ros)
+ find_package(ament_cmake REQUIRED)
+ 
+ find_package(geometry_msgs REQUIRED)
+-find_package(gz-msgs9 REQUIRED)
+-find_package(gz-transport12 REQUIRED)
+-set(GZ_TRANSPORT_VER ${gz-transport12_VERSION_MAJOR})
++
++find_package(gz_msgs_vendor REQUIRED)
++find_package(gz-msgs REQUIRED)
++
++find_package(gz_transport_vendor REQUIRED)
++find_package(gz-transport REQUIRED)
++
++
+ find_package(rclcpp REQUIRED)
+ find_package(ros_gz_interfaces REQUIRED)
+ find_package(rosgraph_msgs REQUIRED)
+diff --git a/vrx_urdf/wamv_description/hooks/resource_paths.dsv.in b/vrx_urdf/wamv_description/hooks/resource_paths.dsv.in
+index 18bfdc43..d0cb7bbf 100644
+--- a/vrx_urdf/wamv_description/hooks/resource_paths.dsv.in
++++ b/vrx_urdf/wamv_description/hooks/resource_paths.dsv.in
+@@ -1 +1,2 @@
++prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;@CMAKE_INSTALL_PREFIX@/share/
+ prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;@CMAKE_INSTALL_PREFIX@/share/@PROJECT_NAME@/models
+diff --git a/vrx_urdf/wamv_description/hooks/resource_paths.sh b/vrx_urdf/wamv_description/hooks/resource_paths.sh
+index 13efdad4..e9a2368d 100644
+--- a/vrx_urdf/wamv_description/hooks/resource_paths.sh
++++ b/vrx_urdf/wamv_description/hooks/resource_paths.sh
+@@ -1 +1,2 @@
++ament_prepend_unique_value GZ_SIM_RESOURCE_PATH "$AMENT_CURRENT_PREFIX/share"
+ ament_prepend_unique_value GZ_SIM_RESOURCE_PATH "$AMENT_CURRENT_PREFIX/share/wamv_description/models"
+diff --git a/vrx_urdf/wamv_gazebo/CMakeLists.txt b/vrx_urdf/wamv_gazebo/CMakeLists.txt
+index af296c7b..ac817649 100644
+--- a/vrx_urdf/wamv_gazebo/CMakeLists.txt
++++ b/vrx_urdf/wamv_gazebo/CMakeLists.txt
+@@ -5,6 +5,10 @@ find_package(ament_cmake REQUIRED)
+ find_package(xacro REQUIRED)
+ find_package(wamv_description REQUIRED)
+ 
++# Hooks
++ament_environment_hooks("hooks/resource_paths.dsv.in")
++ament_environment_hooks("hooks/resource_paths.sh")
++
+ # Generate urdf files from xacro and install
+ # xacro_add_files(
+ #   urdf/wamv_gazebo.urdf.xacro
