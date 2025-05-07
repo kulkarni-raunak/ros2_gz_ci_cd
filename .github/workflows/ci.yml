@@ -2,7 +2,7 @@ name: ROS2 CI with Docker
 
 on: [push, pull_request]
 
-# jobs:
+jobs:
 #   build-and-test:
 #     runs-on: ubuntu-22.04  # The host runs Ubuntu, but...
 #     container:
@@ -60,10 +60,10 @@ on: [push, pull_request]
 #         sleep 20  # Let the simulation spin up
 #         echo "Simulation ran for 120 seconds. Proceeding..."
 
-jobs:
+
   push-to-ghcr:
     runs-on: ubuntu-22.04
-    needs: build-and-test
+    # needs: build-and-test
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
