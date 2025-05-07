@@ -83,3 +83,11 @@ jobs:
           file: .devcontainer/Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/ros2-devcontainer:latest
+
+      - name: Build and Push Humble Devcontainer Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: .devcontainer/.devcontainer_humble/Dockerfile_humble
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/ros2-devcontainer_humble:latest
