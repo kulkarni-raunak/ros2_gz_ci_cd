@@ -158,3 +158,21 @@ index af296c7b..ac817649 100644
  # Generate urdf files from xacro and install
  # xacro_add_files(
  #   urdf/wamv_gazebo.urdf.xacro
+diff --git a/vrx_urdf/wamv_gazebo/hooks/resource_paths.dsv.in b/vrx_urdf/wamv_gazebo/hooks/resource_paths.dsv.in
+new file mode 100644
+index 00000000..54817576
+--- /dev/null
++++ b/vrx_urdf/wamv_gazebo/hooks/resource_paths.dsv.in
+@@ -0,0 +1,2 @@
++prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;@CMAKE_INSTALL_PREFIX@/share/
++prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;@CMAKE_INSTALL_PREFIX@/share/@PROJECT_NAME@/models
+\ No newline at end of file
+diff --git a/vrx_urdf/wamv_gazebo/hooks/resource_paths.sh b/vrx_urdf/wamv_gazebo/hooks/resource_paths.sh
+new file mode 100644
+index 00000000..e6fd1bc2
+--- /dev/null
++++ b/vrx_urdf/wamv_gazebo/hooks/resource_paths.sh
+@@ -0,0 +1,2 @@
++ament_prepend_unique_value GZ_SIM_RESOURCE_PATH "$AMENT_CURRENT_PREFIX/share"
++ament_prepend_unique_value GZ_SIM_RESOURCE_PATH "$AMENT_CURRENT_PREFIX/share/wamv_gazebo/models"
+\ No newline at end of file
