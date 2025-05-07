@@ -17,7 +17,7 @@ jobs:
         submodules: recursive       
 
     - name: Apply VRX patch
-      run: git apply patches/vrx_for_jazzy_fixes.patch
+      run: git apply ./patches/vrx_for_jazzy_fixes.patch
       working-directory: src/submodules/vrx
 
     - name: Install tools
