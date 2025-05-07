@@ -16,6 +16,10 @@ jobs:
       with:
         submodules: recursive       
 
+    - name: Apply VRX patch
+      run: git apply patches/vrx_fixes.patch
+      working-directory: src/submodules/vrx
+
     - name: Install tools
       run: |
         apt update && apt install -y \
@@ -35,7 +39,7 @@ jobs:
     - name: Build packages
       shell: bash
       run: |
-        source /opt/ros/jazzy/setup.bash
+        source /opt/ros/jazzy/setup.bash     
         colcon build --symlink-install --merge-install --event-handlers console_cohesion+
 
     - name: Run tests
@@ -49,11 +53,6 @@ jobs:
       shell: bash
       run: |
         source /opt/ros/jazzy/setup.bash
-        mkdir -p ./src/submodules/vrx_extras
-        vcs import ./src/submodules/vrx_extras/ < vrx_extras.rosinstall
-        rosdep update
-        rosdep install --from-paths src --ignore-src -r -y
-        colcon build --symlink-install --merge-install
         gz sim --version
         source ./install/setup.bash
         echo "Launching VRX Simulation..."
