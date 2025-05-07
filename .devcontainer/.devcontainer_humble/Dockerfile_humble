@@ -58,22 +58,6 @@ RUN cd /home \
     && /home/Groot2-v1.5.2-linux-installer.run in -c --al --root /home/Groot \
     && echo "alias groot=/home/Groot/bin/groot2" >> /etc/bash.bashrc
 
-# Install conan and allow all users to use conan
-RUN python3 -m pip install conan==1.61.0    
-
-COPY ./conan /conan
-COPY ./conanfile.txt /tmp
-ENV CONAN_USER_HOME=/.conan
-RUN mkdir /.conan
-RUN conan config install /conan
-RUN conan profile new --detect default
-RUN conan profile update settings.cppstd=17 default
-RUN conan profile update settings.compiler.libcxx=libstdc++11 default
-RUN conan install /tmp/ --build=missing
-RUN conan profile update options.ad_fusion:target_processor=cpu-only default
-RUN conan profile update options.ad_shared:target_processor=cpu-only default
-RUN chmod -R 777 /.conan
-
 # ccache
 RUN apt-get install -y ccache
 ENV PATH="/usr/lib/ccache:$PATH"
